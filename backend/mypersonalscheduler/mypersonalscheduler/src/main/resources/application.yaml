@@ -1,3 +1,6 @@
 spring:
   application:
     name: mypersonalscheduler
+
+  mongodb:
+    uri: mongodb://localhost:27017/my_personal_scheduler
