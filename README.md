@@ -100,11 +100,11 @@ MyPersonalScheduler/
 └── README.md
 ```
 
-The **frontend** directory contains the Angular client application.
+The `frontend` directory contains the Angular client application.
 
-The **backend** directory contains the Spring Boot REST API and business logic.
+The `backend` directory contains the Spring Boot REST API and business logic.
 
-The **docs** directory contains project documentation and technical diagrams.
+The `docs` directory contains project documentation and technical diagrams.
 
 ## Getting Started
 ### Prerequisites
@@ -137,9 +137,9 @@ environment.
 ## Documentation
 
 Additional technical documentation, architecture diagrams and design decisions
-will be progressively added to the **docs** directory as the project evolves.
+will be progressively added to the `docs` directory as the project evolves.
 
 ## License
 
 This project is licensed under the MIT License.
-See the **LICENSE** file for more information.
+See the `LICENSE` file for more information.
