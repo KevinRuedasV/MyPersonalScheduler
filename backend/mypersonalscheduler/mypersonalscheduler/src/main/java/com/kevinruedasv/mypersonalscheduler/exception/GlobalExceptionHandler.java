@@ -109,6 +109,42 @@ public class GlobalExceptionHandler {
         );
     }
 
+        @ExceptionHandler(ReminderNotFoundException.class)
+        public ResponseEntity<ErrorResponse> handleReminderNotFound(
+                ReminderNotFoundException exception,
+                WebRequest request
+        ) {
+        return buildResponse(
+                HttpStatus.NOT_FOUND,
+                exception.getMessage(),
+                request
+        );
+        }
+
+        @ExceptionHandler(InvalidReminderException.class)
+        public ResponseEntity<ErrorResponse> handleInvalidReminder(
+                InvalidReminderException exception,
+                WebRequest request
+        ) {
+        return buildResponse(
+                HttpStatus.BAD_REQUEST,
+                exception.getMessage(),
+                request
+        );
+        }
+
+        @ExceptionHandler(InvalidReminderDateTimeException.class)
+        public ResponseEntity<ErrorResponse> handleInvalidReminderDateTime(
+                InvalidReminderDateTimeException exception,
+                WebRequest request
+        ) {
+        return buildResponse(
+                HttpStatus.BAD_REQUEST,
+                exception.getMessage(),
+                request
+        );
+        }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedException(
             Exception exception,
