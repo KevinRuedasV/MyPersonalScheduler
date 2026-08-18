@@ -2,6 +2,7 @@ package com.kevinruedasv.mypersonalscheduler.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,19 +18,24 @@ import com.kevinruedasv.mypersonalscheduler.dto.LoginResponse;
 import com.kevinruedasv.mypersonalscheduler.dto.UpdateUserRequest;
 import com.kevinruedasv.mypersonalscheduler.dto.UserResponse;
 import com.kevinruedasv.mypersonalscheduler.model.User;
+import com.kevinruedasv.mypersonalscheduler.service.JwtService;
 import com.kevinruedasv.mypersonalscheduler.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserService userService;
+        private final UserService userService;
 
-    public UserController(
-            UserService userService
-    ) {
+        private final JwtService jwtService;
+
+        public UserController(
+                UserService userService,
+                JwtService jwtService
+        ) {
         this.userService = userService;
-    }
+        this.jwtService = jwtService;
+        }
 
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(
@@ -46,50 +52,76 @@ public class UserController {
                 .body(toResponse(user));
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(
-            @RequestBody LoginRequest request
-    ) {
+        @PostMapping("/login")
+        public ResponseEntity<LoginResponse> login(
+                @RequestBody LoginRequest request
+        ) {
         User user = userService.login(
                 request.getEmail(),
                 request.getPassword()
         );
 
-        return ResponseEntity.ok(
-                new LoginResponse(toResponse(user))
-        );
-    }
+        String accessToken = jwtService.generateToken(user);
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserResponse> getUser(
-            @PathVariable String userId
-    ) {
+        return ResponseEntity.ok(
+                new LoginResponse(
+                        toResponse(user),
+                        accessToken
+                )
+        );
+        }
+
+        @GetMapping("/{userId}")
+        public ResponseEntity<UserResponse> getUser(
+                Authentication authentication,
+                @PathVariable String userId
+        ) {
+        String authenticatedUserId = authentication.getName();
+
+        if (!authenticatedUserId.equals(userId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         User user = userService.getUserById(userId);
 
         return ResponseEntity.ok(toResponse(user));
-    }
+        }
 
-    @PutMapping("/{userId}")
-    public ResponseEntity<UserResponse> updateUsername(
-            @PathVariable String userId,
-            @RequestBody UpdateUserRequest request
-    ) {
+        @PutMapping("/{userId}")
+        public ResponseEntity<UserResponse> updateUsername(
+                Authentication authentication,
+                @PathVariable String userId,
+                @RequestBody UpdateUserRequest request
+        ) {
+        String authenticatedUserId = authentication.getName();
+
+        if (!authenticatedUserId.equals(userId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         User user = userService.updateUsername(
                 userId,
                 request.getUsername()
         );
 
         return ResponseEntity.ok(toResponse(user));
-    }
+        }
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(
-            @PathVariable String userId
-    ) {
+        @DeleteMapping("/{userId}")
+        public ResponseEntity<Void> deleteUser(
+                Authentication authentication,
+                @PathVariable String userId
+        ) {
+        String authenticatedUserId = authentication.getName();
+
+        if (!authenticatedUserId.equals(userId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         userService.deleteUser(userId);
 
         return ResponseEntity.noContent().build();
-    }
+        }
 
     private UserResponse toResponse(
             User user
