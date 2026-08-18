@@ -4,3 +4,12 @@ spring:
 
   mongodb:
     uri: mongodb://localhost:27017/my_personal_scheduler
+
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET}
+      expirationMs: 900000
+
+cors:
+  allowed-origin: "http://localhost:4200"

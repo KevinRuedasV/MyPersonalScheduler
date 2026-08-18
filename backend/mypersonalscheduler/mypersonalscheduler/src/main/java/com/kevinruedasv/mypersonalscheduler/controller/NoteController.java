@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,8 +30,6 @@ import com.kevinruedasv.mypersonalscheduler.service.NoteService;
 @RequestMapping("/api/notes")
 public class NoteController {
 
-    private static final String USER_ID_HEADER = "X-User-Id";
-
     private final NoteService noteService;
 
     public NoteController(NoteService noteService) {
@@ -40,9 +38,10 @@ public class NoteController {
 
     @PostMapping
     public ResponseEntity<NoteResponse> createNote(
-            @RequestHeader(USER_ID_HEADER) String userId,
+            Authentication authentication,
             @RequestBody CreateNoteRequest request
     ) {
+        String userId = authentication.getName();
         Note note = noteService.createNote(
                 userId,
                 request.getTitle(),
@@ -57,9 +56,10 @@ public class NoteController {
 
     @GetMapping("/{noteId}")
     public ResponseEntity<NoteResponse> getNote(
-            @RequestHeader(USER_ID_HEADER) String userId,
+            Authentication authentication,
             @PathVariable String noteId
     ) {
+        String userId = authentication.getName();
         Note note = noteService.getNoteById(userId, noteId);
 
         return ResponseEntity.ok(toResponse(note));
@@ -67,11 +67,12 @@ public class NoteController {
 
     @GetMapping
     public ResponseEntity<List<NoteResponse>> getNotes(
-            @RequestHeader(USER_ID_HEADER) String userId,
+            Authentication authentication,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String tag
     ) {
         List<Note> notes;
+        String userId = authentication.getName();
 
         if (search != null && tag != null) {
             throw new InvalidRequestException(
@@ -96,10 +97,11 @@ public class NoteController {
 
     @PutMapping("/{noteId}")
     public ResponseEntity<NoteResponse> updateNote(
-            @RequestHeader(USER_ID_HEADER) String userId,
+            Authentication authentication,
             @PathVariable String noteId,
             @RequestBody UpdateNoteRequest request
     ) {
+        String userId = authentication.getName();
         Note note = noteService.updateNote(
                 userId,
                 noteId,
@@ -113,9 +115,10 @@ public class NoteController {
 
     @DeleteMapping("/{noteId}")
     public ResponseEntity<Void> deleteNote(
-            @RequestHeader(USER_ID_HEADER) String userId,
+            Authentication authentication,
             @PathVariable String noteId
     ) {
+        String userId = authentication.getName();
         noteService.deleteNote(userId, noteId);
 
         return ResponseEntity.noContent().build();
@@ -123,10 +126,11 @@ public class NoteController {
 
     @PostMapping("/{noteId}/task")
     public ResponseEntity<NoteResponse> convertToTask(
-            @RequestHeader(USER_ID_HEADER) String userId,
+            Authentication authentication,
             @PathVariable String noteId,
             @RequestBody DateRequest request
     ) {
+        String userId = authentication.getName();
         Note note = noteService.convertToTask(
                 userId,
                 noteId,
@@ -138,10 +142,11 @@ public class NoteController {
 
     @PostMapping("/{noteId}/event")
     public ResponseEntity<NoteResponse> convertToEvent(
-            @RequestHeader(USER_ID_HEADER) String userId,
+            Authentication authentication,
             @PathVariable String noteId,
             @RequestBody DateRequest request
     ) {
+        String userId = authentication.getName();
         Note note = noteService.convertToEvent(
                 userId,
                 noteId,
@@ -153,9 +158,10 @@ public class NoteController {
 
     @PostMapping("/{noteId}/complete")
     public ResponseEntity<NoteResponse> completeTask(
-            @RequestHeader(USER_ID_HEADER) String userId,
+            Authentication authentication,
             @PathVariable String noteId
     ) {
+        String userId = authentication.getName();
         Note note = noteService.completeTask(userId, noteId);
 
         return ResponseEntity.ok(toResponse(note));
@@ -163,9 +169,10 @@ public class NoteController {
 
     @PostMapping("/{noteId}/celebrate")
     public ResponseEntity<NoteResponse> celebrateEvent(
-            @RequestHeader(USER_ID_HEADER) String userId,
+            Authentication authentication,
             @PathVariable String noteId
     ) {
+        String userId = authentication.getName();
         Note note = noteService.celebrateEvent(userId, noteId);
 
         return ResponseEntity.ok(toResponse(note));

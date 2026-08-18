@@ -1,29 +1,20 @@
-package com.kevinruedasv.mypersonalscheduler.model;
+package com.kevinruedasv.mypersonalscheduler.dto;
 
 import java.time.Instant;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
+public class UserResponse {
 
-@Document(collection = "users")
-public class User {
-
-    @Id
     private String userId;
 
     private String username;
 
-    @Indexed(unique = true)
     private String email;
-
-    private String passwordHash;
 
     private Instant createdAt;
 
     private Instant updatedAt;
 
-    public User() {
+    public UserResponse() {
     }
 
     public String getUserId() {
@@ -48,14 +39,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
     }
 
     public Instant getCreatedAt() {
