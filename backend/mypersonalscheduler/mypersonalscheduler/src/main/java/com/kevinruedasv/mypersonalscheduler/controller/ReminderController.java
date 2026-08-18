@@ -5,12 +5,12 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,8 +24,6 @@ import com.kevinruedasv.mypersonalscheduler.service.ReminderService;
 @RequestMapping("/api/reminders")
 public class ReminderController {
 
-    private static final String USER_ID_HEADER = "X-User-Id";
-
     private final ReminderService reminderService;
 
     public ReminderController(
@@ -36,9 +34,10 @@ public class ReminderController {
 
     @PostMapping
     public ResponseEntity<ReminderResponse> createReminder(
-            @RequestHeader(USER_ID_HEADER) String userId,
+            Authentication authentication,
             @RequestBody CreateReminderRequest request
     ) {
+        String userId = authentication.getName();
         LocalDateTime reminderDateTime;
 
         try {
@@ -65,8 +64,9 @@ public class ReminderController {
 
     @GetMapping
     public ResponseEntity<List<ReminderResponse>> getReminders(
-            @RequestHeader(USER_ID_HEADER) String userId
+            Authentication authentication
     ) {
+        String userId = authentication.getName();
         return ResponseEntity.ok(
                 reminderService.getRemindersByUserId(userId)
                         .stream()
@@ -77,8 +77,9 @@ public class ReminderController {
 
     @GetMapping("/delivered")
     public ResponseEntity<List<ReminderResponse>> getDeliveredReminders(
-            @RequestHeader(USER_ID_HEADER) String userId
+            Authentication authentication
     ) {
+        String userId = authentication.getName();
         return ResponseEntity.ok(
                 reminderService.getDeliveredReminders(userId)
                         .stream()
@@ -89,9 +90,10 @@ public class ReminderController {
 
     @DeleteMapping("/{reminderId}")
     public ResponseEntity<Void> deleteReminder(
-            @RequestHeader(USER_ID_HEADER) String userId,
+            Authentication authentication,
             @PathVariable String reminderId
     ) {
+        String userId = authentication.getName();
         reminderService.deleteReminder(userId, reminderId);
 
         return ResponseEntity.noContent().build();
@@ -99,8 +101,9 @@ public class ReminderController {
 
     @DeleteMapping
     public ResponseEntity<Void> deleteAllReminders(
-            @RequestHeader(USER_ID_HEADER) String userId
+                Authentication authentication
     ) {
+        String userId = authentication.getName();
         reminderService.deleteAllReminders(userId);
 
         return ResponseEntity.noContent().build();
