@@ -1,3 +1,21 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+import { authGuard } from './core/auth/guards/auth.guard';
+
+export const routes: Routes = [
+  {
+    path: 'auth',
+    children: [
+    ]
+  },
+  {
+    path: '',
+    canActivate: [authGuard],
+    children: [
+    ]
+  },
+  {
+    path: '**',
+    redirectTo: ''
+  }
+];
