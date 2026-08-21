@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 import { User } from '../../models/user.model';
 import { LoginRequest } from '../models/login-request.model';
@@ -14,6 +14,7 @@ export class AuthService {
   private readonly http = inject(HttpClient);
 
   private readonly apiUrl = '/api/users';
+  private readonly tokenKey = 'accessToken';
 
   register(request: RegisterRequest): Observable<User> {
     return this.http.post<User>(
@@ -23,10 +24,31 @@ export class AuthService {
   }
 
   login(request: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(
-      `${this.apiUrl}/login`,
-      request
-    );
+    return this.http
+      .post<LoginResponse>(
+        `${this.apiUrl}/login`,
+        request
+      )
+      .pipe(
+        tap(response => {
+          localStorage.setItem(
+            this.tokenKey,
+            response.accessToken
+          );
+        })
+      );
+  }
+
+  logout(): void {
+    localStorage.removeItem(this.tokenKey);
+  }
+
+  getAccessToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
+
+  isAuthenticated(): boolean {
+    return this.getAccessToken() !== null;
   }
 
   getUser(userId: string): Observable<User> {
