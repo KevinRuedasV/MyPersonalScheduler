@@ -1,0 +1,237 @@
+<div class="auth-page">
+
+  <aside class="brand-panel">
+
+    <div class="brand-logo">
+      <div class="logo-icon">✓</div>
+      <span>MyPersonalScheduler</span>
+    </div>
+
+    <div class="brand-content">
+
+      <h2>
+        Every task, event,<br />
+        and reminder in<br />
+        one calm place.
+      </h2>
+
+      <div class="agenda-card">
+
+        <div class="agenda-title">TODAY</div>
+
+        <div class="agenda-item completed">
+          <span class="time">09:00</span>
+          <span class="check">✓</span>
+          <span class="task">Deep work — Q3 roadmap</span>
+        </div>
+
+        <div class="agenda-item completed">
+          <span class="time">11:30</span>
+          <span class="check">✓</span>
+          <span class="task">Design sync</span>
+        </div>
+
+        <div class="agenda-item">
+          <span class="time">14:00</span>
+          <span class="circle"></span>
+          <span class="task">Review pull requests</span>
+        </div>
+
+        <div class="agenda-item">
+          <span class="time">17:00</span>
+          <span class="circle"></span>
+          <span class="task">Plan tomorrow</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <p class="brand-footer">
+      Plan your day with clarity.
+    </p>
+
+  </aside>
+
+
+  <main class="form-panel">
+
+    <div class="form-container">
+
+      <div class="mobile-logo">
+        <div class="logo-icon">✓</div>
+        <span>MyPersonalScheduler</span>
+      </div>
+
+      <header class="form-header">
+        <h1>Create your account</h1>
+        <p>Start organizing your day in minutes.</p>
+      </header>
+
+
+      <div
+        *ngIf="backendError"
+        class="form-error"
+        role="alert"
+      >
+        ⚠ {{ backendError }}
+      </div>
+
+
+      <form
+        [formGroup]="registerForm"
+        (ngSubmit)="submit()"
+        novalidate
+      >
+
+        <!-- EMAIL -->
+        <div class="field">
+
+          <label for="email">Email</label>
+
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            placeholder="you@example.com"
+            [class.invalid]="email.invalid && email.touched"
+          />
+
+          <small
+            *ngIf="email.hasError('required') && email.touched"
+            class="field-error"
+          >
+            Email is required.
+          </small>
+
+          <small
+            *ngIf="email.hasError('email') && email.touched"
+            class="field-error"
+          >
+            Enter a valid email address.
+          </small>
+
+        </div>
+
+
+        <!-- USERNAME -->
+        <div class="field">
+
+          <label for="username">Username</label>
+
+          <input
+            id="username"
+            type="text"
+            formControlName="username"
+            autocomplete="username"
+            placeholder="your_handle"
+            [class.invalid]="username.invalid && username.touched"
+          />
+
+          <small
+            *ngIf="username.invalid && username.touched"
+            class="field-error"
+          >
+            <span *ngIf="username.hasError('required')">
+              Username is required.
+            </span>
+
+            <span *ngIf="username.hasError('minlength')">
+              Username must be at least 3 characters.
+            </span>
+
+            <span *ngIf="username.hasError('maxlength')">
+              Username must be 24 characters or fewer.
+            </span>
+
+            <span *ngIf="username.hasError('pattern')">
+              Use only letters, numbers, and underscores.
+            </span>
+          </small>
+
+          <small
+            *ngIf="username.valid"
+            class="field-hint"
+          >
+            3–24 characters. Letters, numbers, and underscores.
+          </small>
+
+        </div>
+
+
+        <!-- PASSWORD -->
+        <div class="field">
+
+          <label for="password">Password</label>
+
+          <div class="password-wrapper">
+
+            <input
+              id="password"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              autocomplete="new-password"
+              placeholder="Create a password"
+              [class.invalid]="password.invalid && password.touched"
+            />
+
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="showPassword = !showPassword"
+              [attr.aria-label]="
+                showPassword ? 'Hide password' : 'Show password'
+              "
+            >
+              {{ showPassword ? '◉' : '◌' }}
+            </button>
+
+          </div>
+
+          <small
+            *ngIf="password.invalid && password.touched"
+            class="field-error"
+          >
+            <span *ngIf="password.hasError('required')">
+              Password is required.
+            </span>
+
+            <span *ngIf="password.hasError('minlength')">
+              Password must be at least 8 characters.
+            </span>
+          </small>
+
+          <small
+            *ngIf="password.valid"
+            class="field-hint"
+          >
+            At least 8 characters.
+          </small>
+
+        </div>
+
+
+        <!-- SUBMIT -->
+        <button
+          type="submit"
+          class="submit-button"
+          [disabled]="registerForm.invalid || submitting"
+        >
+          <span *ngIf="!submitting">Create account</span>
+          <span *ngIf="submitting">Creating account...</span>
+        </button>
+
+      </form>
+
+
+      <div class="form-footer">
+        Already have an account?
+        <a routerLink="/auth/login">Sign in</a>
+      </div>
+
+    </div>
+
+  </main>
+
+</div>

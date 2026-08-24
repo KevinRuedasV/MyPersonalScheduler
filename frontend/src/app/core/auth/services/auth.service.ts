@@ -2,10 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
-import { User } from '../../models/user.model';
 import { LoginRequest } from '../models/login-request.model';
-import { LoginResponse } from '../models/login-response.model';
 import { RegisterRequest } from '../models/register-request.model';
+import { AuthResponse } from '../models/auth-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,63 +12,42 @@ import { RegisterRequest } from '../models/register-request.model';
 export class AuthService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = '/api/users';
-  private readonly tokenKey = 'accessToken';
+  private readonly API_URL = 'http://localhost:8080/api/users';
+  private readonly TOKEN_KEY = 'auth_token';
 
-  register(request: RegisterRequest): Observable<User> {
-    return this.http.post<User>(
-      `${this.apiUrl}/register`,
-      request
-    );
+  login(credentials: LoginRequest): Observable<AuthResponse> {
+    return this.http
+      .post<AuthResponse>(`${this.API_URL}/login`, credentials)
+      .pipe(
+        tap((response) => {
+          this.setToken(response.token);
+        })
+      );
   }
 
-  login(request: LoginRequest): Observable<LoginResponse> {
+  register(data: RegisterRequest): Observable<AuthResponse> {
     return this.http
-      .post<LoginResponse>(
-        `${this.apiUrl}/login`,
-        request
-      )
+      .post<AuthResponse>(`${this.API_URL}/register`, data)
       .pipe(
-        tap(response => {
-          localStorage.setItem(
-            this.tokenKey,
-            response.accessToken
-          );
+        tap((response) => {
+          this.setToken(response.token);
         })
       );
   }
 
   logout(): void {
-    localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.TOKEN_KEY);
   }
 
-  getAccessToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+  getToken(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 
   isAuthenticated(): boolean {
-    return this.getAccessToken() !== null;
+    return !!this.getToken();
   }
 
-  getUser(userId: string): Observable<User> {
-    return this.http.get<User>(
-      `${this.apiUrl}/${userId}`
-    );
-  }
-
-  updateUsername(
-    userId: string,
-    username: string
-  ): Observable<User> {
-    return this.http.put<User>(
-      `${this.apiUrl}/${userId}`,
-      { username }
-    );
-  }
-
-  deleteUser(userId: string): Observable<void> {
-    return this.http.delete<void>(
-      `${this.apiUrl}/${userId}`
-    );
+  private setToken(token: string): void {
+    localStorage.setItem(this.TOKEN_KEY, token);
   }
 }
