@@ -39,7 +39,7 @@ export class RegisterComponent {
         Validators.pattern(/^[a-zA-Z0-9_]+$/),
       ],
     ],
-    password: ['', [Validators.required, Validators.minLength(8)]],
+    password: ['', [Validators.required]],
   });
 
   get email() {
@@ -67,7 +67,7 @@ export class RegisterComponent {
     this.authService.register(this.registerForm.getRawValue()).subscribe({
       next: () => {
         this.submitting = false;
-        this.router.navigate(['/']);
+        this.router.navigate(['/auth/login']);
       },
 
       error: (error) => {

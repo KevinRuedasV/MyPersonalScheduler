@@ -196,17 +196,6 @@
             <span *ngIf="password.hasError('required')">
               Password is required.
             </span>
-
-            <span *ngIf="password.hasError('minlength')">
-              Password must be at least 8 characters.
-            </span>
-          </small>
-
-          <small
-            *ngIf="password.valid"
-            class="field-hint"
-          >
-            At least 8 characters.
           </small>
 
         </div>

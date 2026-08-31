@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
 import { LoginRequest } from '../models/login-request.model';
+import { LoginResponse } from '../models/login-response.model';
 import { RegisterRequest } from '../models/register-request.model';
-import { AuthResponse } from '../models/auth-response.model';
+import { User } from '../../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,24 +16,18 @@ export class AuthService {
   private readonly API_URL = 'http://localhost:8080/api/users';
   private readonly TOKEN_KEY = 'auth_token';
 
-  login(credentials: LoginRequest): Observable<AuthResponse> {
+  login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http
-      .post<AuthResponse>(`${this.API_URL}/login`, credentials)
+      .post<LoginResponse>(`${this.API_URL}/login`, credentials)
       .pipe(
         tap((response) => {
-          this.setToken(response.token);
+          this.setToken(response.accessToken);
         })
       );
   }
 
-  register(data: RegisterRequest): Observable<AuthResponse> {
-    return this.http
-      .post<AuthResponse>(`${this.API_URL}/register`, data)
-      .pipe(
-        tap((response) => {
-          this.setToken(response.token);
-        })
-      );
+  register(data: RegisterRequest): Observable<User> {
+    return this.http.post<User>(`${this.API_URL}/register`, data);
   }
 
   logout(): void {
