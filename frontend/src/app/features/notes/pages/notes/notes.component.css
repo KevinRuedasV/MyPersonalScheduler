@@ -1,0 +1,276 @@
+.notes-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.page-header h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.page-header p {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.new-note-button {
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 8px;
+  background: #0f172a;
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.new-note-button:hover {
+  background: #1e293b;
+}
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.note-card {
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 4%);
+}
+
+.note-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.type-badge,
+.status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.type-badge {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.type-badge.task {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.type-badge.event {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.status {
+  color: #64748b;
+}
+
+.note-card h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  color: #0f172a;
+}
+
+.content {
+  margin: 0;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.date {
+  margin: 16px 0 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.tags span {
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.state {
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  padding: 32px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  text-align: center;
+  color: #64748b;
+}
+
+.state h3,
+.state p {
+  margin: 0;
+}
+
+.state h3 {
+  color: #0f172a;
+}
+
+.state.error {
+  color: #b91c1c;
+}
+
+.state.error button {
+  padding: 8px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  background: #fff;
+  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .page-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .page-header .new-note-button {
+    width: 100%;
+  }
+
+  .notes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.type-filters {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.type-filters button {
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #64748b;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.type-filters button:hover {
+  color: #0f172a;
+}
+
+.type-filters button.active {
+  background: #0f172a;
+  color: #fff;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-controls input,
+.filter-controls select {
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  color: #334155;
+  font: inherit;
+  font-size: 13px;
+}
+
+.filter-controls input {
+  width: 220px;
+}
+
+.filter-controls input:focus,
+.filter-controls select:focus {
+  outline: 2px solid #cbd5e1;
+  outline-offset: 1px;
+}
+
+@media (max-width: 800px) {
+  .filters {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .type-filters {
+    width: fit-content;
+  }
+
+  .filter-controls {
+    width: 100%;
+  }
+
+  .filter-controls input {
+    flex: 1;
+    width: auto;
+  }
+
+  .filter-controls select {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .filter-controls {
+    flex-direction: column;
+  }
+
+  .filter-controls input,
+  .filter-controls select {
+    width: 100%;
+  }
+}

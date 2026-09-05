@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { authGuard } from './core/auth/guards/auth.guard';
+import { AppShellComponent } from './shell/app-shell.component';
 
 export const routes: Routes = [
   {
@@ -22,8 +23,51 @@ export const routes: Routes = [
   },
   {
     path: '',
+    component: AppShellComponent,
     canActivate: [authGuard],
-    children: []
+    children: [
+      {
+        path: '',
+        redirectTo: 'notes',
+        pathMatch: 'full'
+      },
+      {
+        path: 'notes',
+        loadComponent: () =>
+          import('./features/notes/pages/notes/notes.component')
+            .then(m => m.NotesComponent)
+      },
+      {
+        path: 'tasks',
+        loadComponent: () =>
+          import('./features/notes/pages/notes/notes.component')
+            .then(m => m.NotesComponent),
+        data: {
+          noteType: 'TASK'
+        }
+      },
+      {
+        path: 'events',
+        loadComponent: () =>
+          import('./features/notes/pages/notes/notes.component')
+            .then(m => m.NotesComponent),
+        data: {
+          noteType: 'EVENT'
+        }
+      },
+      {
+        path: 'calendar',
+        loadComponent: () =>
+          import('./features/calendar/pages/calendar/calendar.component')
+            .then(m => m.CalendarComponent)
+      },
+      {
+        path: 'reminders',
+        loadComponent: () =>
+          import('./features/reminders/pages/reminders/reminders.component')
+            .then(m => m.RemindersComponent)
+      }
+    ]
   },
   {
     path: '**',

@@ -1,0 +1,76 @@
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">M</div>
+      <span>MyPersonalScheduler</span>
+    </div>
+
+    <nav class="navigation">
+      <a
+        routerLink="/notes"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <span>Notes</span>
+      </a>
+
+      <a
+        routerLink="/tasks"
+        routerLinkActive="active"
+      >
+        <span>Tasks</span>
+      </a>
+
+      <a
+        routerLink="/events"
+        routerLinkActive="active"
+      >
+        <span>Events</span>
+      </a>
+
+      <a
+        routerLink="/calendar"
+        routerLinkActive="active"
+      >
+        <span>Calendar</span>
+      </a>
+
+      <a
+        routerLink="/reminders"
+        routerLinkActive="active"
+      >
+        <span>Reminders</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a
+        routerLink="/profile"
+        routerLinkActive="active"
+      >
+        <span>Profile</span>
+      </a>
+
+      <button type="button" class="logout-button" (click)="logout()">
+        Log out
+      </button>
+    </div>
+  </aside>
+
+  <div class="main-area">
+    <header class="header">
+      <div>
+        <h1>MyPersonalScheduler</h1>
+        <p>Organize your notes, tasks and events.</p>
+      </div>
+
+      <button type="button" class="new-note-button">
+        + New note
+      </button>
+    </header>
+
+    <main class="content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

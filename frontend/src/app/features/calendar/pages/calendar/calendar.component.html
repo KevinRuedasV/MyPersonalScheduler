@@ -1,0 +1,98 @@
+<section class="calendar-page">
+  <div class="page-header">
+    <div>
+      <h2>Calendar</h2>
+      <p>Your tasks and events organized by date.</p>
+    </div>
+
+    <div class="calendar-actions">
+      <button type="button" (click)="goToToday()">
+        Today
+      </button>
+
+      <button type="button" (click)="previousMonth()" aria-label="Previous month">
+        ‹
+      </button>
+
+      <button type="button" (click)="nextMonth()" aria-label="Next month">
+        ›
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="state">
+      <p>Loading calendar...</p>
+    </div>
+  } @else if (error()) {
+    <div class="state error">
+      <p>{{ error() }}</p>
+
+      <button type="button" (click)="loadNotes()">
+        Try again
+      </button>
+    </div>
+  } @else {
+    <div class="calendar-card">
+      <div class="calendar-toolbar">
+        <h3>{{ monthLabel() }}</h3>
+      </div>
+
+      <div class="calendar-weekdays">
+        <span>Mon</span>
+        <span>Tue</span>
+        <span>Wed</span>
+        <span>Thu</span>
+        <span>Fri</span>
+        <span>Sat</span>
+        <span>Sun</span>
+      </div>
+
+      <div class="calendar-grid">
+        @for (day of calendarDays(); track day.dateKey) {
+          <div
+            class="calendar-day"
+            [class.other-month]="!day.isCurrentMonth"
+            [class.today]="day.isToday"
+          >
+            <div class="day-number">
+              <span>{{ day.date.getDate() }}</span>
+            </div>
+
+            <div class="day-notes">
+              @for (note of getNotesForDay(day.date); track note.noteId) {
+                <button
+                  type="button"
+                  class="calendar-note"
+                  [class.task]="note.type === 'TASK'"
+                  [class.event]="note.type === 'EVENT'"
+                  [title]="note.title"
+                >
+                  <span class="note-type">
+                    {{ note.type === 'TASK' ? 'Task' : 'Event' }}
+                  </span>
+
+                  <span class="note-title">
+                    {{ note.title }}
+                  </span>
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="calendar-legend">
+        <span>
+          <span class="legend-dot task"></span>
+          Tasks
+        </span>
+
+        <span>
+          <span class="legend-dot event"></span>
+          Events
+        </span>
+      </div>
+    </div>
+  }
+</section>

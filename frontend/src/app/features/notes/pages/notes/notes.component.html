@@ -1,0 +1,137 @@
+<section class="notes-page">
+  <div class="page-header">
+    <div>
+      <h2>Notes</h2>
+      <p>Your notes, tasks and events in one place.</p>
+    </div>
+
+    <button type="button" class="new-note-button">
+      + New note
+    </button>
+  </div>
+
+  <div class="filters">
+    <div class="type-filters">
+      <button
+        type="button"
+        [class.active]="selectedType() === 'ALL'"
+        (click)="selectType('ALL')"
+      >
+        All
+      </button>
+
+      <button
+        type="button"
+        [class.active]="selectedType() === 'TASK'"
+        (click)="selectType('TASK')"
+      >
+        Tasks
+      </button>
+
+      <button
+        type="button"
+        [class.active]="selectedType() === 'EVENT'"
+        (click)="selectType('EVENT')"
+      >
+        Events
+      </button>
+    </div>
+
+    <div class="filter-controls">
+      <input
+        type="search"
+        placeholder="Search notes..."
+        [value]="searchTerm()"
+        (input)="setSearchTerm($any($event.target).value)"
+      />
+
+      <select
+        [value]="selectedTag()"
+        (change)="setTag($any($event.target).value)"
+      >
+        <option value="">All tags</option>
+
+        @for (tag of availableTags(); track tag) {
+          <option [value]="tag">
+            #{{ tag }}
+          </option>
+        }
+      </select>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="state">
+      <p>Loading notes...</p>
+    </div>
+  } @else if (error()) {
+    <div class="state error">
+      <p>{{ error() }}</p>
+
+      <button type="button" (click)="loadNotes()">
+        Try again
+      </button>
+    </div>
+  } @else if (filteredNotes().length === 0) {
+    <div class="state empty">
+      <h3>No notes found</h3>
+
+      @if (searchTerm() || selectedTag() || selectedType() !== 'ALL') {
+        <p>
+          Try changing your filters or search terms.
+        </p>
+      } @else {
+        <p>
+          Create your first note to start organizing your day.
+        </p>
+      }
+
+      <button type="button" class="new-note-button">
+        + Create note
+      </button>
+    </div>
+  } @else {
+    <div class="notes-grid">
+      @for (note of filteredNotes(); track trackByNoteId($index, note)) {
+        <article class="note-card">
+          <div class="note-card-header">
+            <span
+              class="type-badge"
+              [class]="note.type.toLowerCase()"
+            >
+              {{ note.type }}
+            </span>
+
+            @if (note.status) {
+              <span class="status">
+                {{ note.status }}
+              </span>
+            }
+          </div>
+
+          <h3>{{ note.title }}</h3>
+
+          @if (note.content) {
+            <p class="content">
+              {{ note.content }}
+            </p>
+          }
+
+          @if (note.date) {
+            <p class="date">
+              {{ note.date }}
+            </p>
+          }
+
+          @if (note.tags.length > 0) {
+            <div class="tags">
+              @for (tag of note.tags; track tag) {
+                <span>#{{ tag }}</span>
+              }
+            </div>
+          }
+        </article>
+      }
+    </div>
+  }
+</section>

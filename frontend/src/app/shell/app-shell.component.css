@@ -1,0 +1,188 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px 28px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #0f172a;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.navigation a,
+.sidebar-bottom a,
+.logout-button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #64748b;
+  font: inherit;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.navigation a:hover,
+.sidebar-bottom a:hover,
+.logout-button:hover,
+.navigation a.active,
+.sidebar-bottom a.active {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.navigation a.active,
+.sidebar-bottom a.active {
+  font-weight: 600;
+}
+
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: auto;
+}
+
+.main-area {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px 32px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.header p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.new-note-button {
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 8px;
+  background: #0f172a;
+  color: #ffffff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.new-note-button:hover {
+  background: #1e293b;
+}
+
+.content {
+  flex: 1;
+  padding: 32px;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .header {
+    padding: 16px 20px;
+  }
+
+  .content {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sidebar {
+    width: 64px;
+    padding: 16px 8px;
+  }
+
+  .brand {
+    justify-content: center;
+    padding: 0 0 24px;
+  }
+
+  .brand span,
+  .navigation a span,
+  .sidebar-bottom a span,
+  .logout-button {
+    display: none;
+  }
+
+  .navigation a,
+  .sidebar-bottom a {
+    justify-content: center;
+  }
+
+  .header p {
+    display: none;
+  }
+
+  .new-note-button {
+    padding: 9px 12px;
+  }
+
+  .content {
+    padding: 16px;
+  }
+}
