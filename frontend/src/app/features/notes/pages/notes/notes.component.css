@@ -88,6 +88,14 @@
 }
 
 .status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
   color: #64748b;
 }
 
@@ -153,11 +161,20 @@
 }
 
 .state.error button {
-  padding: 8px 14px;
+  margin-top: 12px;
   border: 1px solid #cbd5e1;
-  border-radius: 7px;
-  background: #fff;
+  padding: 7px 12px;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #475569;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
+}
+
+.state.error button:hover {
+  background: #f8fafc;
 }
 
 @media (max-width: 640px) {
@@ -273,4 +290,57 @@
   .filter-controls select {
     width: 100%;
   }
+}
+
+.note-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.edit-button {
+  border: 1px solid #cbd5e1;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #475569;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.edit-button:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.status.pending {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fcd34d;
+}
+
+.status.upcoming {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-color: #93c5fd;
+}
+
+.status.completed,
+.status.celebrated {
+  background: #ecfdf5;
+  color: #047857;
+  border-color: #a7f3d0;
+}
+
+.status.cancelled {
+  background: #fef2f2;
+  color: #b91c1c;
+  border-color: #fecaca;
 }

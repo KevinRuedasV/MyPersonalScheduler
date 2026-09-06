@@ -86,7 +86,11 @@
         </p>
       }
 
-      <button type="button" class="new-note-button">
+      <button
+        type="button"
+        class="new-note-button"
+        (click)="openNoteForm()"
+      >
         + Create note
       </button>
     </div>
@@ -102,11 +106,25 @@
               {{ note.type }}
             </span>
 
-            @if (note.status) {
-              <span class="status">
-                {{ note.status }}
-              </span>
-            }
+            <div class="note-card-actions">
+              @if (note.status) {
+                <span
+                  class="status"
+                  [class]="note.status.toLowerCase()"
+                >
+                  {{ note.status }}
+                </span>
+              }
+
+              <button
+                type="button"
+                class="edit-button"
+                (click)="editNote(note)"
+                aria-label="Edit note"
+              >
+                Edit
+              </button>
+            </div>
           </div>
 
           <h3>{{ note.title }}</h3>
@@ -119,7 +137,7 @@
 
           @if (note.date) {
             <p class="date">
-              {{ 'Due date: ' + note.date }}
+              {{ note.type === 'TASK' ? 'Due date: ' : 'Event date: ' }}{{ note.date }}
             </p>
           }
 
@@ -137,8 +155,9 @@
   @if (showNoteForm()) {
     <app-note-form
       [initialType]="formType()"
+      [note]="editingNote()"
       (closed)="closeNoteForm()"
-      (submitted)="createNote($event)"
+      (submitted)="saveNote($event)"
     />
   }
 </section>

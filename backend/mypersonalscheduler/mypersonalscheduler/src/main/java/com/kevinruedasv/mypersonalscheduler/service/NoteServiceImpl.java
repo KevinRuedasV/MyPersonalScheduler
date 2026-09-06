@@ -133,7 +133,8 @@ public class NoteServiceImpl implements NoteService {
             String noteId,
             String title,
             String content,
-            List<String> tags
+            List<String> tags,
+            LocalDate date
     ) {
         validateUserId(userId);
         validateNoteId(noteId);
@@ -152,6 +153,17 @@ public class NoteServiceImpl implements NoteService {
         note.setTitle(title.trim());
         note.setContent(content);
         note.setTags(normalizeTags(tags));
+
+        if (note instanceof Task task) {
+            validateDate(date, "Due date");
+            task.setDueDate(date);
+        }
+
+        if (note instanceof Event event) {
+            validateDate(date, "Event date");
+            event.setEventDate(date);
+        }
+
         note.setUpdatedAt(Instant.now());
 
         return noteRepository.save(note);

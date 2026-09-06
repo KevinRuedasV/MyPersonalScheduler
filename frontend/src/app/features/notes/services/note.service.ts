@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Note } from '../models/note.model';
 import { CreateNoteRequest } from '../models/create-note-request.model';
 import { DateRequest } from '../models/date-request.model';
+import { UpdateNoteRequest } from '../models/update-note-request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,13 @@ export class NoteService {
 
   createNote(data: CreateNoteRequest): Observable<Note> {
     return this.http.post<Note>(this.API_URL, data);
+  }
+
+  updateNote(noteId: string, data: UpdateNoteRequest): Observable<Note> {
+    return this.http.put<Note>(
+      `${this.API_URL}/${noteId}`,
+      data
+    );
   }
 
   convertToTask(noteId: string, date: string): Observable<Note> {

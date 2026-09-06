@@ -38,7 +38,8 @@ public interface NoteService {
             String noteId,
             String title,
             String content,
-            List<String> tags
+            List<String> tags,
+            LocalDate date
     );
 
     void deleteNote(

@@ -1,9 +1,11 @@
 export type NoteType = 'NOTE' | 'TASK' | 'EVENT';
 
 export type NoteStatus =
-  | 'ACTIVE'
+  | 'PENDING'
+  | 'UPCOMING'
   | 'COMPLETED'
-  | 'CELEBRATED';
+  | 'CELEBRATED'
+  | 'CANCELLED';
 
 export interface Note {
   noteId: string;

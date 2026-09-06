@@ -51,8 +51,11 @@ export class NotesComponent {
 
   readonly showNoteForm = signal(false);
   readonly formType = signal<NoteType>('NOTE');
+  readonly editingNote = signal<Note | null>(null);
 
   openNoteForm(type?: NoteType): void {
+    this.editingNote.set(null);
+
     if (type) {
       this.formType.set(type);
     } else {
@@ -65,23 +68,47 @@ export class NotesComponent {
 
   closeNoteForm(): void {
     this.showNoteForm.set(false);
+    this.editingNote.set(null);
   }
 
-  createNote(data: {
+  saveNote(data: {
     type: NoteType;
     title: string;
     content: string;
     tags: string[];
     date: string | null;
   }): void {
+    const note = this.editingNote();
+
+    if (note) {
+      this.noteService.updateNote(note.noteId, {
+        title: data.title,
+        content: data.content,
+        tags: data.tags,
+        date: data.date
+      }).subscribe({
+        next: () => {
+          this.closeNoteForm();
+          this.loadNotes();
+        },
+        error: (error) => {
+          this.error.set(
+            error?.error?.message ?? 'Unable to update the note.'
+          );
+        }
+      });
+
+      return;
+    }
+
     this.noteService.createNote({
       title: data.title,
       content: data.content,
       tags: data.tags
     }).subscribe({
-      next: (note) => {
+      next: (createdNote) => {
         if (data.type === 'TASK' && data.date) {
-          this.noteService.convertToTask(note.noteId, data.date).subscribe({
+          this.noteService.convertToTask(createdNote.noteId, data.date).subscribe({
             next: () => {
               this.closeNoteForm();
               this.loadNotes();
@@ -95,7 +122,7 @@ export class NotesComponent {
         }
 
         if (data.type === 'EVENT' && data.date) {
-          this.noteService.convertToEvent(note.noteId, data.date).subscribe({
+          this.noteService.convertToEvent(createdNote.noteId, data.date).subscribe({
             next: () => {
               this.closeNoteForm();
               this.loadNotes();
@@ -117,6 +144,11 @@ export class NotesComponent {
         );
       }
     });
+  }
+
+  editNote(note: Note): void {
+    this.editingNote.set(note);
+    this.showNoteForm.set(true);
   }
 
   ngOnInit(): void {

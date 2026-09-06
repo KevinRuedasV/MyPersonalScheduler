@@ -10,6 +10,8 @@ public class UpdateNoteRequest {
 
     private List<String> tags;
 
+    private String date;
+
     public UpdateNoteRequest() {
     }
 
@@ -35,5 +37,13 @@ public class UpdateNoteRequest {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
