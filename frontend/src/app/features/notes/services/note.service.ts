@@ -40,6 +40,12 @@ export class NoteService {
     );
   }
 
+  deleteNote(noteId: string): Observable<void> {
+    return this.http.delete<void>(
+      `${this.API_URL}/${noteId}`
+    );
+  }
+
   convertToTask(noteId: string, date: string): Observable<Note> {
     const request: DateRequest = { date };
 

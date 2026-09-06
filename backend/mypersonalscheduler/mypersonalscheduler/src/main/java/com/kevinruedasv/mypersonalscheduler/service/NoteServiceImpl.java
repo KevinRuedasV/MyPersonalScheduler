@@ -19,14 +19,20 @@ import com.kevinruedasv.mypersonalscheduler.model.Note;
 import com.kevinruedasv.mypersonalscheduler.model.Task;
 import com.kevinruedasv.mypersonalscheduler.model.TaskStatus;
 import com.kevinruedasv.mypersonalscheduler.repository.NoteRepository;
+import com.kevinruedasv.mypersonalscheduler.repository.ReminderRepository;
 
 @Service
 public class NoteServiceImpl implements NoteService {
 
     private final NoteRepository noteRepository;
+    private final ReminderRepository reminderRepository;
 
-    public NoteServiceImpl(NoteRepository noteRepository) {
+    public NoteServiceImpl(
+            NoteRepository noteRepository,
+            ReminderRepository reminderRepository
+    ) {
         this.noteRepository = noteRepository;
+        this.reminderRepository = reminderRepository;
     }
 
     @Override
@@ -181,6 +187,7 @@ public class NoteServiceImpl implements NoteService {
 
         validateOwnership(note, userId);
 
+        reminderRepository.deleteByNoteId(noteId);
         noteRepository.delete(note);
     }
 

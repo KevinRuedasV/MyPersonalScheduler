@@ -52,6 +52,7 @@ export class NotesComponent {
   readonly showNoteForm = signal(false);
   readonly formType = signal<NoteType>('NOTE');
   readonly editingNote = signal<Note | null>(null);
+  readonly deletingNoteId = signal<string | null>(null);
 
   openNoteForm(type?: NoteType): void {
     this.editingNote.set(null);
@@ -149,6 +150,32 @@ export class NotesComponent {
   editNote(note: Note): void {
     this.editingNote.set(note);
     this.showNoteForm.set(true);
+  }
+
+  deleteNote(note: Note): void {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${note.title}"?`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.deletingNoteId.set(note.noteId);
+    this.error.set('');
+
+    this.noteService.deleteNote(note.noteId).subscribe({
+      next: () => {
+        this.deletingNoteId.set(null);
+        this.loadNotes();
+      },
+      error: (error) => {
+        this.deletingNoteId.set(null);
+        this.error.set(
+          error?.error?.message ?? 'Unable to delete the note.'
+        );
+      }
+    });
   }
 
   ngOnInit(): void {

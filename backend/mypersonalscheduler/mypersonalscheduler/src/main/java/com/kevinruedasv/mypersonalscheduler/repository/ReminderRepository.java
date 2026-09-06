@@ -26,4 +26,6 @@ public interface ReminderRepository
     );
 
     void deleteByUserId(String userId);
+
+    void deleteByNoteId(String noteId);
 }

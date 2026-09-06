@@ -344,3 +344,29 @@
   color: #b91c1c;
   border-color: #fecaca;
 }
+
+.delete-button {
+  border: 1px solid #fecaca;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #b91c1c;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.delete-button:hover:not(:disabled) {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.delete-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

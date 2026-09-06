@@ -124,6 +124,16 @@
               >
                 Edit
               </button>
+
+              <button
+                type="button"
+                class="delete-button"
+                [disabled]="deletingNoteId() === note.noteId"
+                (click)="deleteNote(note)"
+                aria-label="Delete note"
+              >
+                {{ deletingNoteId() === note.noteId ? 'Deleting...' : 'Delete' }}
+              </button>
             </div>
           </div>
 
