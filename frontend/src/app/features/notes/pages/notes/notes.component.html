@@ -57,6 +57,15 @@
           </option>
         }
       </select>
+
+      <button
+        type="button"
+        class="clear-filters-button"
+        [disabled]="!searchTerm() && !selectedTag()"
+        (click)="clearFilters()"
+      >
+        Clear
+      </button>
     </div>
   </div>
 

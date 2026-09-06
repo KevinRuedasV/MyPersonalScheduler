@@ -54,6 +54,11 @@ export class NotesComponent {
   readonly editingNote = signal<Note | null>(null);
   readonly deletingNoteId = signal<string | null>(null);
 
+  clearFilters(): void {
+    this.searchTerm.set('');
+    this.selectedTag.set('');
+  }
+
   openNoteForm(type?: NoteType): void {
     this.editingNote.set(null);
 

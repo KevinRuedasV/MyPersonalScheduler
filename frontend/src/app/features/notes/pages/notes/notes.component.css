@@ -178,6 +178,16 @@
 }
 
 @media (max-width: 640px) {
+  .filter-controls {
+    flex-direction: column;
+  }
+
+  .filter-controls input,
+  .filter-controls select,
+  .filter-controls .clear-filters-button {
+    width: 100%;
+  }
+
   .page-header {
     align-items: flex-start;
     flex-direction: column;
@@ -281,17 +291,6 @@
   }
 }
 
-@media (max-width: 640px) {
-  .filter-controls {
-    flex-direction: column;
-  }
-
-  .filter-controls input,
-  .filter-controls select {
-    width: 100%;
-  }
-}
-
 .note-card-actions {
   display: flex;
   align-items: center;
@@ -368,5 +367,33 @@
 
 .delete-button:disabled {
   opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.clear-filters-button {
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  color: #475569;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.clear-filters-button:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.clear-filters-button:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
 }
