@@ -1,0 +1,145 @@
+<div class="modal-backdrop" (click)="close()">
+  <section
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="note-form-title"
+    (click)="$event.stopPropagation()"
+  >
+    <header class="modal-header">
+      <div>
+        <span class="eyebrow">Create</span>
+        <h2 id="note-form-title">New note</h2>
+        <p>Create a note, task or event.</p>
+      </div>
+
+      <button
+        type="button"
+        class="close-button"
+        aria-label="Close"
+        (click)="close()"
+      >
+        ×
+      </button>
+    </header>
+
+    <form (ngSubmit)="submit()">
+      <div class="form-group">
+        <label for="note-type">Type</label>
+
+        <select
+          id="note-type"
+          [value]="type()"
+          (change)="setType($any($event.target).value)"
+        >
+          <option value="NOTE">Note</option>
+          <option value="TASK">Task</option>
+          <option value="EVENT">Event</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="note-title">Title</label>
+
+        <input
+          id="note-title"
+          type="text"
+          placeholder="Give your note a title"
+          [value]="title()"
+          (input)="setTitle($any($event.target).value)"
+          maxlength="200"
+          autofocus
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="note-content">Content</label>
+
+        <textarea
+          id="note-content"
+          rows="6"
+          placeholder="Write something..."
+          [value]="content()"
+          (input)="setContent($any($event.target).value)"
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="note-tags">Tags</label>
+
+        <div class="tag-input">
+          <input
+            id="note-tags"
+            type="text"
+            placeholder="Add a tag"
+            [value]="tagInput()"
+            (input)="setTagInput($any($event.target).value)"
+            (keydown)="handleTagKeydown($event)"
+          />
+
+          <button
+            type="button"
+            class="secondary-button"
+            (click)="addTag()"
+          >
+            Add
+          </button>
+        </div>
+
+        @if (tags().length > 0) {
+          <div class="tags">
+            @for (tag of tags(); track tag) {
+              <span class="tag">
+                {{ tag }}
+
+                <button
+                  type="button"
+                  aria-label="Remove tag"
+                  (click)="removeTag(tag)"
+                >
+                  ×
+                </button>
+              </span>
+            }
+          </div>
+        }
+      </div>
+
+      @if (type() !== 'NOTE') {
+        <div class="form-group">
+          <label for="note-date">
+            {{ type() === 'TASK' ? 'Due date' : 'Event date' }}
+          </label>
+
+          <input
+            id="note-date"
+            type="date"
+            [value]="date()"
+            (change)="setDate($any($event.target).value)"
+          />
+        </div>
+      }
+
+      @if (error()) {
+        <p class="form-error">{{ error() }}</p>
+      }
+
+      <footer class="modal-actions">
+        <button
+          type="button"
+          class="secondary-button"
+          (click)="close()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="primary-button"
+        >
+          {{ 'Create ' + type().toLowerCase() }}
+        </button>
+      </footer>
+    </form>
+  </section>
+</div>

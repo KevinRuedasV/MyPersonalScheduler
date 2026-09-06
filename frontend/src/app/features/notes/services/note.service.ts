@@ -3,6 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Note } from '../models/note.model';
+import { CreateNoteRequest } from '../models/create-note-request.model';
+import { DateRequest } from '../models/date-request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +26,27 @@ export class NoteService {
     }
 
     return this.http.get<Note[]>(this.API_URL, { params });
+  }
+
+  createNote(data: CreateNoteRequest): Observable<Note> {
+    return this.http.post<Note>(this.API_URL, data);
+  }
+
+  convertToTask(noteId: string, date: string): Observable<Note> {
+    const request: DateRequest = { date };
+
+    return this.http.post<Note>(
+      `${this.API_URL}/${noteId}/task`,
+      request
+    );
+  }
+
+  convertToEvent(noteId: string, date: string): Observable<Note> {
+    const request: DateRequest = { date };
+
+    return this.http.post<Note>(
+      `${this.API_URL}/${noteId}/event`,
+      request
+    );
   }
 }

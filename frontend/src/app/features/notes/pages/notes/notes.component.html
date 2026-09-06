@@ -5,7 +5,7 @@
       <p>Your notes, tasks and events in one place.</p>
     </div>
 
-    <button type="button" class="new-note-button">
+    <button type="button" class="new-note-button" (click)="openNoteForm()">
       + New note
     </button>
   </div>
@@ -119,7 +119,7 @@
 
           @if (note.date) {
             <p class="date">
-              {{ note.date }}
+              {{ 'Due date: ' + note.date }}
             </p>
           }
 
@@ -133,5 +133,12 @@
         </article>
       }
     </div>
+  }
+  @if (showNoteForm()) {
+    <app-note-form
+      [initialType]="formType()"
+      (closed)="closeNoteForm()"
+      (submitted)="createNote($event)"
+    />
   }
 </section>
