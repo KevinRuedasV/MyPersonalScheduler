@@ -1,7 +1,6 @@
 package com.kevinruedasv.mypersonalscheduler.service;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Locale;
 
 import org.springframework.security.crypto.password.PasswordEncoder;

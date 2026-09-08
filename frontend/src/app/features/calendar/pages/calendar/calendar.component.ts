@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { NoteService } from '../../../notes/services/note.service';
 import { Note } from '../../../notes/models/note.model';
+import { Router } from '@angular/router';
 
 interface CalendarDay {
   date: Date;
@@ -16,6 +17,7 @@ interface CalendarDay {
   styleUrl: './calendar.component.css'
 })
 export class CalendarComponent {
+  private readonly router = inject(Router);
   private readonly noteService = inject(NoteService);
 
   readonly notes = signal<Note[]>([]);
@@ -88,6 +90,10 @@ export class CalendarComponent {
         this.loading.set(false);
       }
     });
+  }
+
+  openNote(note: Note): void {
+    this.router.navigate(['/notes', note.noteId]);
   }
 
   previousMonth(): void {

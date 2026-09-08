@@ -153,6 +153,7 @@
 
 .calendar-note:hover {
   background: #f1f5f9;
+  filter: brightness(0.97);
 }
 
 .calendar-note.task {

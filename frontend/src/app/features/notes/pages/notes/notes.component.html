@@ -106,16 +106,23 @@
   } @else {
     <div class="notes-grid">
       @for (note of filteredNotes(); track trackByNoteId($index, note)) {
-        <article class="note-card">
+        <article
+          class="note-card"
+          tabindex="0"
+          role="button"
+          (click)="openNoteDetail(note)"
+          (keydown.enter)="openNoteDetail(note)"
+          (keydown.space)="openNoteDetail(note); $event.preventDefault()"
+        >
           <div class="note-card-header">
-            <span
-              class="type-badge"
-              [class]="note.type.toLowerCase()"
-            >
-              {{ note.type }}
-            </span>
+            <div class="note-card-meta">
+              <span
+                class="type-badge"
+                [class]="note.type.toLowerCase()"
+              >
+                {{ note.type }}
+              </span>
 
-            <div class="note-card-actions">
               @if (note.status) {
                 <span
                   class="status"
@@ -124,26 +131,17 @@
                   {{ note.status }}
                 </span>
               }
-
-              <button
-                type="button"
-                class="edit-button"
-                (click)="editNote(note)"
-                aria-label="Edit note"
-              >
-                Edit
-              </button>
-
-              <button
-                type="button"
-                class="delete-button"
-                [disabled]="deletingNoteId() === note.noteId"
-                (click)="deleteNote(note)"
-                aria-label="Delete note"
-              >
-                {{ deletingNoteId() === note.noteId ? 'Deleting...' : 'Delete' }}
-              </button>
             </div>
+
+            <button
+              type="button"
+              class="delete-button"
+              [disabled]="deletingNoteId() === note.noteId"
+              (click)="deleteNote(note); $event.stopPropagation()"
+              aria-label="Delete note"
+            >
+              {{ deletingNoteId() === note.noteId ? '...' : '🗑' }}
+            </button>
           </div>
 
           <h3>{{ note.title }}</h3>
@@ -177,6 +175,14 @@
       [note]="editingNote()"
       (closed)="closeNoteForm()"
       (submitted)="saveNote($event)"
+    />
+  }
+  @if (showNoteDetail() && selectedNote()) {
+    <app-note-detail
+      [note]="selectedNote()!"
+      (closed)="closeNoteDetail()"
+      (editRequested)="editFromDetail($event)"
+      (deleteRequested)="deleteFromDetail($event)"
     />
   }
 </section>

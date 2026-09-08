@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 
 import { ReminderService } from '../../services/reminder.service';
 import { Reminder } from '../../models/reminder.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reminders',
@@ -11,6 +12,7 @@ import { Reminder } from '../../models/reminder.model';
 })
 export class RemindersComponent {
   private readonly reminderService = inject(ReminderService);
+  private readonly router = inject(Router);
 
   readonly reminders = signal<Reminder[]>([]);
   readonly deliveredReminders = signal<Reminder[]>([]);
@@ -86,6 +88,10 @@ export class RemindersComponent {
         this.error.set('Unable to delete the reminders.');
       }
     });
+  }
+
+  openNote(reminder: Reminder): void {
+    this.router.navigate(['/notes', reminder.noteId]);
   }
 
   formatDateTime(value: string): string {

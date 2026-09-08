@@ -47,19 +47,41 @@
 }
 
 .note-card {
+  position: relative;
   padding: 20px;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 1px 2px rgb(15 23 42 / 4%);
+  background: #ffffff;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.note-card:hover {
+  transform: translateY(-2px);
+  border-color: #cbd5e1;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.note-card:focus-visible {
+  outline: 2px solid #0f172a;
+  outline-offset: 2px;
 }
 
 .note-card-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 12px;
+}
+
+.note-card-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 16px;
 }
 
 .type-badge,
@@ -100,17 +122,29 @@
 }
 
 .note-card h3 {
-  margin: 0 0 8px;
-  font-size: 17px;
+  margin: 14px 0 0;
   color: #0f172a;
+  font-size: 16px;
+  line-height: 1.4;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 
 .content {
-  margin: 0;
+  margin: 12px 0 0;
   color: #475569;
   font-size: 14px;
-  line-height: 1.6;
-  white-space: pre-wrap;
+  line-height: 1.5;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
 }
 
 .date {
@@ -344,32 +378,6 @@
   border-color: #fecaca;
 }
 
-.delete-button {
-  border: 1px solid #fecaca;
-  padding: 5px 10px;
-  border-radius: 6px;
-  background: #ffffff;
-  color: #b91c1c;
-  font: inherit;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    color 0.15s ease;
-}
-
-.delete-button:hover:not(:disabled) {
-  background: #fef2f2;
-  border-color: #fca5a5;
-}
-
-.delete-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
 .clear-filters-button {
   height: 38px;
   padding: 0 12px;
@@ -396,4 +404,38 @@
 .clear-filters-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.delete-button {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 15px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.note-card:hover .delete-button {
+  opacity: 1;
+}
+
+.delete-button:hover {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.delete-button:disabled {
+  cursor: wait;
+  opacity: 0.5;
 }

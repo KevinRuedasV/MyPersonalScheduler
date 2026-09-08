@@ -299,3 +299,24 @@
     justify-content: center;
   }
 }
+
+.item-content {
+  min-width: 0;
+}
+
+.item-content h4 {
+  margin: 0;
+}
+
+.item-content p {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.5;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}

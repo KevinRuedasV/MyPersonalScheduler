@@ -47,6 +47,12 @@ export const routes: Routes = [
             .then(m => m.NotesComponent)
       },
       {
+        path: 'notes/:noteId',
+        loadComponent: () =>
+          import('./features/notes/pages/notes/notes.component')
+            .then(m => m.NotesComponent)
+      },
+      {
         path: 'tasks',
         loadComponent: () =>
           import('./features/notes/pages/notes/notes.component')

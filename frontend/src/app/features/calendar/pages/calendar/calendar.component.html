@@ -67,6 +67,7 @@
                   [class.task]="note.type === 'TASK'"
                   [class.event]="note.type === 'EVENT'"
                   [title]="note.title"
+                  (click)="openNote(note)"
                 >
                   <span class="note-type">
                     {{ note.type === 'TASK' ? 'Task' : 'Event' }}

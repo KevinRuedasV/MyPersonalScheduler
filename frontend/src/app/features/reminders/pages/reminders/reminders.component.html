@@ -36,7 +36,14 @@
   } @else {
     <div class="reminders-list">
       @for (reminder of reminders(); track reminder.reminderId) {
-        <article class="reminder-card">
+        <article
+          class="reminder-card"
+          tabindex="0"
+          role="button"
+          (click)="openNote(reminder)"
+          (keydown.enter)="openNote(reminder)"
+          (keydown.space)="openNote(reminder); $event.preventDefault()"
+        >
           <div class="reminder-main">
             <div class="reminder-icon">⏰</div>
 
@@ -60,7 +67,7 @@
             <button
               type="button"
               class="delete-button"
-              (click)="deleteReminder(reminder.reminderId)"
+              (click)="deleteReminder(reminder.reminderId); $event.stopPropagation()"
               aria-label="Delete reminder"
             >
               Delete

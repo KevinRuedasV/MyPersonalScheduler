@@ -1,18 +1,20 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { NoteService } from '../../services/note.service';
 import { Note, NoteType } from '../../models/note.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NoteFormComponent } from '../../components/note-form/note-form.component';
+import { NoteDetailComponent } from '../../components/note-detail/note-detail.component';
 
 @Component({
   selector: 'app-notes',
   standalone: true,
-  imports: [NoteFormComponent],
+  imports: [NoteFormComponent, NoteDetailComponent],
   templateUrl: './notes.component.html',
   styleUrl: './notes.component.css'
 })
 export class NotesComponent {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly noteService = inject(NoteService);
 
   readonly notes = signal<Note[]>([]);
@@ -53,6 +55,8 @@ export class NotesComponent {
   readonly formType = signal<NoteType>('NOTE');
   readonly editingNote = signal<Note | null>(null);
   readonly deletingNoteId = signal<string | null>(null);
+  readonly selectedNote = signal<Note | null>(null);
+  readonly showNoteDetail = signal(false);
 
   clearFilters(): void {
     this.searchTerm.set('');
@@ -95,7 +99,7 @@ export class NotesComponent {
       }).subscribe({
         next: () => {
           this.closeNoteForm();
-          this.loadNotes();
+          this.router.navigate(['/notes']);
         },
         error: (error) => {
           this.error.set(
@@ -152,6 +156,25 @@ export class NotesComponent {
     });
   }
 
+  openNoteDetail(note: Note): void {
+    this.router.navigate(['/notes', note.noteId]);
+  }
+
+  closeNoteDetail(): void {
+    this.router.navigate(['/notes']);
+  }
+
+  editFromDetail(note: Note): void {
+    this.showNoteDetail.set(false);
+    this.editingNote.set(note);
+    this.showNoteForm.set(true);
+  }
+
+  deleteFromDetail(note: Note): void {
+    this.showNoteDetail.set(false);
+    this.deleteNote(note);
+  }
+
   editNote(note: Note): void {
     this.editingNote.set(note);
     this.showNoteForm.set(true);
@@ -187,9 +210,9 @@ export class NotesComponent {
     const noteType = this.route.snapshot.data['noteType'] as NoteType | undefined;
 
     if (noteType) {
-        this.selectedType.set(noteType);
+      this.selectedType.set(noteType);
     }
-    
+
     this.loadNotes();
   }
 
@@ -201,6 +224,17 @@ export class NotesComponent {
       next: (notes) => {
         this.notes.set(notes);
         this.loading.set(false);
+
+        const noteId = this.route.snapshot.paramMap.get('noteId');
+
+        if (noteId) {
+          const note = notes.find(note => note.noteId === noteId);
+
+          if (note) {
+            this.selectedNote.set(note);
+            this.showNoteDetail.set(true);
+          }
+        }
       },
       error: () => {
         this.error.set('Unable to load your notes.');
