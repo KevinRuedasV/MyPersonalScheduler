@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { authGuard } from './core/auth/guards/auth.guard';
 import { AppShellComponent } from './shell/app-shell.component';
+import { guestGuard } from './core/auth/guards/guest.guard';
 
 export const routes: Routes = [
   {
@@ -9,12 +10,14 @@ export const routes: Routes = [
     children: [
       {
         path: 'login',
+        canActivate: [guestGuard],
         loadComponent: () =>
           import('./core/auth/pages/login/login.component')
             .then(m => m.LoginComponent)
       },
       {
         path: 'register',
+        canActivate: [guestGuard],
         loadComponent: () =>
           import('./core/auth/pages/register/register.component')
             .then(m => m.RegisterComponent)
@@ -28,8 +31,14 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'notes',
+        redirectTo: 'dashboard',
         pathMatch: 'full'
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./features/dashboard/pages/dashboard/dashboard.component')
+            .then(m => m.DashboardComponent)
       },
       {
         path: 'notes',
