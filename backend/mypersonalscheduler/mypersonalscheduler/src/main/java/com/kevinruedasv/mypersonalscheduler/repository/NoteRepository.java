@@ -10,4 +10,6 @@ public interface NoteRepository extends MongoRepository<Note, String> {
 
         List<Note> findByUserId(String userId);
 
+        void deleteByUserId(String userId);
+
 }

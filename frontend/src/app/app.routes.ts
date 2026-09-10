@@ -81,7 +81,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/reminders/pages/reminders/reminders.component')
             .then(m => m.RemindersComponent)
-      }
+      },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('./features/profile/pages/profile/profile.component')
+            .then(m => m.ProfileComponent)
+      },
     ]
   },
   {

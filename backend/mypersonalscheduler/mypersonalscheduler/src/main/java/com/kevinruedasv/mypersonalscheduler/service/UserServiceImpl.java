@@ -11,20 +11,28 @@ import com.kevinruedasv.mypersonalscheduler.exception.InvalidUserException;
 import com.kevinruedasv.mypersonalscheduler.exception.UserAlreadyExistsException;
 import com.kevinruedasv.mypersonalscheduler.exception.UserNotFoundException;
 import com.kevinruedasv.mypersonalscheduler.model.User;
+import com.kevinruedasv.mypersonalscheduler.repository.NoteRepository;
+import com.kevinruedasv.mypersonalscheduler.repository.ReminderRepository;
 import com.kevinruedasv.mypersonalscheduler.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final NoteRepository noteRepository;
+    private final ReminderRepository reminderRepository;
 
     private final PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(
             UserRepository userRepository,
+            NoteRepository noteRepository,
+            ReminderRepository reminderRepository,
             PasswordEncoder passwordEncoder
     ) {
         this.userRepository = userRepository;
+        this.noteRepository = noteRepository;
+        this.reminderRepository = reminderRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -129,6 +137,8 @@ public class UserServiceImpl implements UserService {
 
         User user = getUserById(userId);
 
+        reminderRepository.deleteByUserId(userId);
+        noteRepository.deleteByUserId(userId);
         userRepository.delete(user);
     }
 
