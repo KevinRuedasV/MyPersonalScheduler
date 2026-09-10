@@ -107,7 +107,10 @@ public class NoteController {
                 noteId,
                 request.getTitle(),
                 request.getContent(),
-                request.getTags()
+                request.getTags(),
+                request.getDate() == null 
+                    ? null 
+                    : LocalDate.parse(request.getDate())
         );
 
         return ResponseEntity.ok(toResponse(note));

@@ -1,0 +1,81 @@
+<div class="overlay" (click)="close()">
+  <article
+    class="detail-modal"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="note().title"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="detail-header">
+      <div class="detail-meta">
+        <span
+          class="type-badge"
+          [class]="note().type.toLowerCase()"
+        >
+          {{ note().type }}
+        </span>
+
+        @if (note().status) {
+          <span
+            class="status"
+            [class]="note().status!.toLowerCase()"
+          >
+            {{ note().status }}
+          </span>
+        }
+      </div>
+
+      <button
+        type="button"
+        class="close-button"
+        (click)="close()"
+        aria-label="Close note"
+      >
+        ×
+      </button>
+    </div>
+
+    <div class="detail-content">
+      <h2>{{ note().title }}</h2>
+
+      @if (note().date) {
+        <p class="date">
+          {{ note().type === 'TASK' ? 'Due date: ' : 'Event date: ' }}
+          {{ note().date }}
+        </p>
+      }
+
+      @if (note().content) {
+        <div class="content">
+          {{ note().content }}
+        </div>
+      }
+
+      @if (note().tags.length > 0) {
+        <div class="tags">
+          @for (tag of note().tags; track tag) {
+            <span>#{{ tag }}</span>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="detail-actions">
+      <button
+        type="button"
+        class="delete-button"
+        (click)="delete()"
+      >
+        Delete
+      </button>
+
+      <button
+        type="button"
+        class="edit-button"
+        (click)="edit()"
+      >
+        Edit
+      </button>
+    </div>
+  </article>
+</div>

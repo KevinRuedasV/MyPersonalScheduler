@@ -1,0 +1,80 @@
+<section class="reminders-page">
+  <div class="page-header">
+    <div>
+      <h2>Reminders</h2>
+      <p>Keep track of your upcoming reminders.</p>
+    </div>
+
+    @if (reminders().length > 0) {
+      <button
+        type="button"
+        class="clear-button"
+        (click)="deleteAllReminders()"
+      >
+        Clear all
+      </button>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="state">
+      <p>Loading reminders...</p>
+    </div>
+  } @else if (error()) {
+    <div class="state error">
+      <p>{{ error() }}</p>
+
+      <button type="button" (click)="loadReminders()">
+        Try again
+      </button>
+    </div>
+  } @else if (reminders().length === 0) {
+    <div class="state empty">
+      <h3>No reminders</h3>
+      <p>You don't have any reminders at the moment.</p>
+    </div>
+  } @else {
+    <div class="reminders-list">
+      @for (reminder of reminders(); track reminder.reminderId) {
+        <article
+          class="reminder-card"
+          tabindex="0"
+          role="button"
+          (click)="openNote(reminder)"
+          (keydown.enter)="openNote(reminder)"
+          (keydown.space)="openNote(reminder); $event.preventDefault()"
+        >
+          <div class="reminder-main">
+            <div class="reminder-icon">⏰</div>
+
+            <div class="reminder-content">
+              <h3>{{ reminder.message }}</h3>
+
+              <p class="reminder-date">
+                {{ formatDateTime(reminder.reminderDateTime) }}
+              </p>
+            </div>
+          </div>
+
+          <div class="reminder-actions">
+            <span
+              class="status"
+              [class.delivered]="reminder.status.toLowerCase() === 'delivered'"
+            >
+              {{ reminder.status }}
+            </span>
+
+            <button
+              type="button"
+              class="delete-button"
+              (click)="deleteReminder(reminder.reminderId); $event.stopPropagation()"
+              aria-label="Delete reminder"
+            >
+              Delete
+            </button>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</section>

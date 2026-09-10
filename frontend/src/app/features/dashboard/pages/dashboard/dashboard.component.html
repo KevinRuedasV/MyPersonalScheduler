@@ -1,0 +1,204 @@
+<section class="dashboard-page">
+  <div class="page-header">
+    <div>
+      <h2>Dashboard</h2>
+      <p>A quick overview of your notes and upcoming activities.</p>
+    </div>
+
+    <a routerLink="/notes" class="primary-button">
+      + New note
+    </a>
+  </div>
+
+  @if (loading()) {
+    <div class="state">
+      <p>Loading dashboard...</p>
+    </div>
+  } @else if (error()) {
+    <div class="state error">
+      <p>{{ error() }}</p>
+
+      <button type="button" (click)="loadDashboard()">
+        Try again
+      </button>
+    </div>
+  } @else {
+    <div class="summary-grid">
+      <article class="summary-card">
+        <span class="summary-label">Total notes</span>
+        <strong>{{ totalNotes() }}</strong>
+      </article>
+
+      <article class="summary-card">
+        <span class="summary-label">Pending tasks</span>
+        <strong>{{ pendingTasks() }}</strong>
+      </article>
+
+      <article class="summary-card">
+        <span class="summary-label">Upcoming events</span>
+        <strong>{{ upcomingEvents() }}</strong>
+      </article>
+    </div>
+
+    <div class="dashboard-grid">
+      <section class="dashboard-card">
+        <div class="section-header">
+          <div>
+            <h3>Upcoming tasks</h3>
+            <p>Your next tasks to take care of.</p>
+          </div>
+
+          <a routerLink="/tasks">View all</a>
+        </div>
+
+        @if (upcomingTasks().length === 0) {
+          <div class="empty-state">
+            <p>No upcoming tasks.</p>
+          </div>
+        } @else {
+          <div class="item-list">
+            @for (note of upcomingTasks(); track trackByNoteId($index, note)) {
+              <article class="list-item">
+                <div>
+                  <h4>{{ note.title }}</h4>
+
+                  @if (note.content) {
+                    <p>{{ note.content }}</p>
+                  }
+                </div>
+
+                <span class="date">
+                  {{ note.date }}
+                </span>
+              </article>
+            }
+          </div>
+        }
+      </section>
+
+      <section class="dashboard-card">
+        <div class="section-header">
+          <div>
+            <h3>Upcoming events</h3>
+            <p>Events coming up soon.</p>
+          </div>
+
+          <a routerLink="/events">View all</a>
+        </div>
+
+        @if (upcomingEventList().length === 0) {
+          <div class="empty-state">
+            <p>No upcoming events.</p>
+          </div>
+        } @else {
+          <div class="item-list">
+            @for (
+              note of upcomingEventList();
+              track trackByNoteId($index, note)
+            ) {
+              <article class="list-item">
+                <div class="item-content">
+                  <h4>{{ note.title }}</h4>
+
+                  @if (note.content) {
+                    <p>{{ note.content }}</p>
+                  }
+                </div>
+
+                <span class="date">
+                  {{ note.date }}
+                </span>
+              </article>
+            }
+          </div>
+        }
+      </section>
+
+      <section class="dashboard-card">
+        <div class="section-header">
+          <div>
+            <h3>Recent notes</h3>
+            <p>Your latest activity.</p>
+          </div>
+
+          <a routerLink="/notes">View all</a>
+        </div>
+
+        @if (recentNotes().length === 0) {
+          <div class="empty-state">
+            <p>No notes yet.</p>
+          </div>
+        } @else {
+          <div class="item-list">
+            @for (note of recentNotes(); track trackByNoteId($index, note)) {
+              <article class="list-item">
+                <div>
+                  <span
+                    class="type-badge"
+                    [class]="note.type.toLowerCase()"
+                  >
+                    {{ note.type }}
+                  </span>
+
+                  <h4>{{ note.title }}</h4>
+                </div>
+              </article>
+            }
+          </div>
+        }
+      </section>
+
+      <section class="dashboard-card">
+        <div class="section-header">
+          <div>
+            <h3>Recent reminders</h3>
+            <p>Your latest reminders.</p>
+          </div>
+
+          <a routerLink="/reminders">View all</a>
+        </div>
+
+        @if (recentReminders().length === 0) {
+          <div class="empty-state">
+            <p>No reminders yet.</p>
+          </div>
+        } @else {
+          <div class="item-list">
+            @for (
+              reminder of recentReminders();
+              track trackByReminderId($index, reminder)
+            ) {
+              <article class="list-item">
+                <div>
+                  <h4>{{ reminder.message }}</h4>
+
+                  <p>
+                    {{ reminder.reminderDateTime }}
+                  </p>
+                </div>
+              </article>
+            }
+          </div>
+        }
+      </section>
+    </div>
+
+    <section class="quick-actions">
+      <h3>Quick actions</h3>
+
+      <div class="action-list">
+        <a routerLink="/notes" class="action-button">
+          + New note
+        </a>
+
+        <a routerLink="/tasks" class="action-button">
+          View tasks
+        </a>
+
+        <a routerLink="/calendar" class="action-button">
+          View calendar
+        </a>
+      </div>
+    </section>
+  }
+</section>

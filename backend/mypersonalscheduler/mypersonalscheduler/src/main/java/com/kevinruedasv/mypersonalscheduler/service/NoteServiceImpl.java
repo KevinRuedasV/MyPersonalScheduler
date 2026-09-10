@@ -19,14 +19,20 @@ import com.kevinruedasv.mypersonalscheduler.model.Note;
 import com.kevinruedasv.mypersonalscheduler.model.Task;
 import com.kevinruedasv.mypersonalscheduler.model.TaskStatus;
 import com.kevinruedasv.mypersonalscheduler.repository.NoteRepository;
+import com.kevinruedasv.mypersonalscheduler.repository.ReminderRepository;
 
 @Service
 public class NoteServiceImpl implements NoteService {
 
     private final NoteRepository noteRepository;
+    private final ReminderRepository reminderRepository;
 
-    public NoteServiceImpl(NoteRepository noteRepository) {
+    public NoteServiceImpl(
+            NoteRepository noteRepository,
+            ReminderRepository reminderRepository
+    ) {
         this.noteRepository = noteRepository;
+        this.reminderRepository = reminderRepository;
     }
 
     @Override
@@ -133,7 +139,8 @@ public class NoteServiceImpl implements NoteService {
             String noteId,
             String title,
             String content,
-            List<String> tags
+            List<String> tags,
+            LocalDate date
     ) {
         validateUserId(userId);
         validateNoteId(noteId);
@@ -152,6 +159,17 @@ public class NoteServiceImpl implements NoteService {
         note.setTitle(title.trim());
         note.setContent(content);
         note.setTags(normalizeTags(tags));
+
+        if (note instanceof Task task) {
+            validateDate(date, "Due date");
+            task.setDueDate(date);
+        }
+
+        if (note instanceof Event event) {
+            validateDate(date, "Event date");
+            event.setEventDate(date);
+        }
+
         note.setUpdatedAt(Instant.now());
 
         return noteRepository.save(note);
@@ -169,6 +187,7 @@ public class NoteServiceImpl implements NoteService {
 
         validateOwnership(note, userId);
 
+        reminderRepository.deleteByNoteId(noteId);
         noteRepository.delete(note);
     }
 
